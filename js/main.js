@@ -27,6 +27,8 @@ const messages = document.querySelector('h2');
 /*----- event listeners -----*/
 document.getElementById('board').addEventListener('click', handleTurn);
 
+document.getElementById('reset-button').addEventListener('click', init);
+
 /*----- functions -----*/
 function init() {
     board = [
@@ -35,19 +37,20 @@ function init() {
     '', '', ''
     ];
     };
-    //be sure to call the init function!
-    init();
+ 
+init();
 
 function render() {
     board.forEach(function(mark, index){
     console.log(mark, index);
-        //this sets the text content of the square of the same position to the mark on the board. 
         squares[index].textContent = mark;
     });
-    messages.textContent = `It's ${turn}'s turn!`;
+    messages.textContent = win === 'T' ? `That's a tie, queen!` : win ? `${win} wins the game!` : `It's ${turn}'s turn!`;
     };
 
-function handleTurn() {
+render();
+
+function handleTurn(event) {
     let idx = squares.findIndex(function(square) {
     return square === event.target;
     });
@@ -64,12 +67,14 @@ function handleTurn() {
 function getWinner() {
     let winner = null;
     winningCombos.forEach(function(combo, index) {
-        if (board[combo[0]] && board[combo[0]] === board[combo[1]] && board[combo[0]] === board[combo[2]]) winner = board[combo[0]];
-      });
-
-      win = board[0] && board[0] === board[1] && board[0] === board[2] ? board[0] : null;
-      messages.textContent = win ? `${win} wins the game!` : `It's ${turn}'s turn!`;
-      return winner;
+        if (board[combo[0]] && board[combo[0]] === board[combo[1]] && board[combo[0]] === board[combo[2]]) {
+            winner = board[combo[0]];
+            }
+            });
+            
+            return winner ? winner : board.includes('') ? null : 'T';
+      
+  
     }
 
 
